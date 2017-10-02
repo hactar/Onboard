@@ -169,10 +169,29 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
         [self.view addSubview:self.moviePlayerController.view];
     }
 
+    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.iconImageView, self.titleLabel, self.bodyLabel, self.actionButton]];
+    
+    
+    stackView.translatesAutoresizingMaskIntoConstraints = NO;
+    stackView.axis = UILayoutConstraintAxisVertical;
+    [self.view addSubview:stackView];
+    
+    [[stackView topAnchor] constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
+    [[stackView bottomAnchor] constraintEqualToAnchor:self.view.bottomAnchor constant:-20].active = YES;
+    [[stackView leadingAnchor] constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+    [[stackView trailingAnchor] constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+
+    stackView.spacing = 8.0;
+    
+    [self.iconImageView.widthAnchor constraintEqualToAnchor:self.iconImageView.heightAnchor constant:0];
+    
+    /*
+    
     [self.view addSubview:self.iconImageView];
     [self.view addSubview:self.titleLabel];
     [self.view addSubview:self.bodyLabel];
     [self.view addSubview:self.actionButton];
+     */
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -262,6 +281,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
 
+    /*
     if (self.videoURL) {
         self.moviePlayerController.view.frame = self.view.frame;
     }
@@ -285,6 +305,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     self.bodyLabel.frame = CGRectMake(xPadding, bodyYOrigin, contentWidth, CGRectGetHeight(self.bodyLabel.frame));
 
     self.actionButton.frame = CGRectMake((CGRectGetMaxX(self.view.frame) / 2) - (contentWidth / 2), CGRectGetMaxY(self.view.frame) - self.underPageControlPadding - kMainPageControlHeight - kActionButtonHeight - self.bottomPadding, contentWidth, kActionButtonHeight);
+     */
 }
 
 
