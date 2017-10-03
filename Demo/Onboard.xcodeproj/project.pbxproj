@@ -48,6 +48,7 @@
 		5BFFBBB21BF847670083BEC3 /* video1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5BFFBBAF1BF847670083BEC3 /* video1.mp4 */; };
 		5BFFBBB31BF847670083BEC3 /* video2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5BFFBBB01BF847670083BEC3 /* video2.mp4 */; };
 		5BFFBBB41BF847670083BEC3 /* video3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5BFFBBB11BF847670083BEC3 /* video3.mp4 */; };
+		CD0ED43C1F83C728002E99E6 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = CD0ED43B1F83C727002E99E6 /* UIImageViewAligned.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,8 @@
 		5BFFBBAF1BF847670083BEC3 /* video1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video1.mp4; sourceTree = "<group>"; };
 		5BFFBBB01BF847670083BEC3 /* video2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video2.mp4; sourceTree = "<group>"; };
 		5BFFBBB11BF847670083BEC3 /* video3.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video3.mp4; sourceTree = "<group>"; };
+		CD0ED43A1F83C727002E99E6 /* UIImageViewAligned.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
+		CD0ED43B1F83C727002E99E6 /* UIImageViewAligned.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		F3D2BE1A1BEB5A33000C63A6 /* OnboardingContentViewController_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OnboardingContentViewController_Private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +203,8 @@
 		273D50B419A1A34F00E38DB2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				CD0ED43A1F83C727002E99E6 /* UIImageViewAligned.h */,
+				CD0ED43B1F83C727002E99E6 /* UIImageViewAligned.m */,
 				273D50DD19A1A49C00E38DB2 /* OnboardingViewController.h */,
 				273D50DE19A1A49C00E38DB2 /* OnboardingViewController.m */,
 				F3D2BE1A1BEB5A33000C63A6 /* OnboardingContentViewController_Private.h */,
@@ -386,6 +391,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				273D50DF19A1A49C00E38DB2 /* OnboardingViewController.m in Sources */,
+				CD0ED43C1F83C728002E99E6 /* UIImageViewAligned.m in Sources */,
 				274E5B191A8C558D009765AB /* MBProgressHUD.m in Sources */,
 				273D50BF19A1A34F00E38DB2 /* AppDelegate.m in Sources */,
 				273D50BB19A1A34F00E38DB2 /* main.m in Sources */,

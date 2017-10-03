@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIImageViewAligned.h"
 @import AVKit;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -42,7 +43,7 @@ typedef void (^action_callback)(OnboardingViewController *onboardController);
 /**
  * @brief The image view used to show the top icon.
  */
-@property (nonatomic, strong) UIImageView *iconImageView;
+@property (nonatomic, strong) UIImageViewAligned *iconImageView;
 
 
 /**

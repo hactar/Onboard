@@ -14,7 +14,6 @@ static NSString * const kDefaultOnboardingFont = @"Helvetica-Light";
 
 #define DEFAULT_TEXT_COLOR [UIColor whiteColor];
 
-static CGFloat const kContentWidthMultiplier = 0.9;
 static CGFloat const kDefaultImageViewSize = 100;
 static CGFloat const kDefaultTopPadding = 60;
 static CGFloat const kDefaultUnderIconPadding = 30;
@@ -25,8 +24,6 @@ static CGFloat const kDefaultTitleFontSize = 38;
 static CGFloat const kDefaultBodyFontSize = 28;
 static CGFloat const kDefaultButtonFontSize = 24;
 
-static CGFloat const kActionButtonHeight = 50;
-static CGFloat const kMainPageControlHeight = 35;
 
 NSString * const kOnboardMainTextAccessibilityIdentifier = @"OnboardMainTextAccessibilityIdentifier";
 NSString * const kOnboardSubTextAccessibilityIdentifier = @"OnboardSubTextAccessibilityIdentifier";
@@ -88,16 +85,16 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 
 - (instancetype)initWithTitle:(NSString *)title body:(NSString *)body image:(UIImage *)image videoURL:(NSURL *)videoURL buttonText:(NSString *)buttonText actionBlock:(action_callback)actionBlock {
     self = [super init];
-
+    
     if (self == nil) {
         return nil;
     }
-
+    
     // Icon image view
-    self.iconImageView = [[UIImageView alloc] initWithImage:image];
+    self.iconImageView = [[UIImageViewAligned alloc] initWithImage:image];
     self.iconWidth = image ? image.size.width : kDefaultImageViewSize;
     self.iconHeight = image ? image.size.height : kDefaultImageViewSize;
-
+    //self.iconImageView.alignTop = YES;
     // Title label
     self.titleLabel = [UILabel new];
     self.titleLabel.accessibilityIdentifier = kOnboardMainTextAccessibilityIdentifier;
@@ -106,7 +103,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     self.titleLabel.font = [UIFont fontWithName:kDefaultOnboardingFont size:kDefaultTitleFontSize];
     self.titleLabel.numberOfLines = 0;
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
-
+    
     // Body label
     self.bodyLabel = [UILabel new];
     self.bodyLabel.accessibilityIdentifier = kOnboardSubTextAccessibilityIdentifier;
@@ -115,7 +112,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     self.bodyLabel.font = [UIFont fontWithName:kDefaultOnboardingFont size:kDefaultBodyFontSize];
     self.bodyLabel.numberOfLines = 0;
     self.bodyLabel.textAlignment = NSTextAlignmentCenter;
-
+    
     // Action button
     self.actionButton = [UIButton new];
     self.actionButton.accessibilityIdentifier = kOnboardActionButtonAccessibilityIdentifier;
@@ -123,12 +120,12 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     [self.actionButton setTitle:buttonText forState:UIControlStateNormal];
     [self.actionButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.actionButton addTarget:self action:@selector(handleButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-
+    
     self.buttonActionHandler = actionBlock ?: ^(OnboardingViewController *controller){};
-
+    
     // Movie player
     self.videoURL = videoURL;
-
+    
     // Auto-navigation
     self.movesToNextViewController = NO;
     
@@ -153,22 +150,22 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppEnteredForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
-
+    
     self.view.backgroundColor = [UIColor clearColor];
-
+    
     // Add all our subviews
     if (self.videoURL) {
         self.player = [[AVPlayer alloc] initWithURL:self.videoURL];
-
+        
         self.moviePlayerController = [AVPlayerViewController new];
         self.moviePlayerController.player = self.player;
         self.moviePlayerController.showsPlaybackControls = NO;
-
+        
         [self.view addSubview:self.moviePlayerController.view];
     }
-
+    
     UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.iconImageView, self.titleLabel, self.bodyLabel, self.actionButton]];
     
     
@@ -177,21 +174,16 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     [self.view addSubview:stackView];
     
     [[stackView topAnchor] constraintEqualToAnchor:self.view.topAnchor constant:0].active = YES;
-    [[stackView bottomAnchor] constraintEqualToAnchor:self.view.bottomAnchor constant:-20].active = YES;
-    [[stackView leadingAnchor] constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
-    [[stackView trailingAnchor] constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
-
-    stackView.spacing = 8.0;
+    [[stackView bottomAnchor] constraintEqualToAnchor:self.view.bottomAnchor constant:-32].active = YES;
+    [[stackView leadingAnchor] constraintEqualToAnchor:self.view.leadingAnchor constant:8].active = YES;
+    [[stackView trailingAnchor] constraintEqualToAnchor:self.view.trailingAnchor constant:-8].active = YES;
+    self.titleLabel.minimumScaleFactor = .5;
+    [self.actionButton.heightAnchor constraintEqualToConstant:50].active = YES;
     
-    [self.iconImageView.widthAnchor constraintEqualToAnchor:self.iconImageView.heightAnchor constant:0];
-    
-    /*
-    
-    [self.view addSubview:self.iconImageView];
-    [self.view addSubview:self.titleLabel];
-    [self.view addSubview:self.bodyLabel];
-    [self.view addSubview:self.actionButton];
-     */
+    stackView.spacing = 12.0;
+ 
+    self.iconImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.iconImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisVertical];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -202,7 +194,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     if (self.delegate) {
         [self.delegate setNextPage:self];
     }
-
+    
     // If we have a video URL, start playing
     if (self.videoURL) {
         [self.player play];
@@ -214,7 +206,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
             self.viewWillAppearBlock();
         });
     }
-
+    
     self.wasPreviouslyVisible = YES;
 }
 
@@ -237,27 +229,27 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
+    
     // Call our view will disappear block
     if (self.viewWillDisappearBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.viewWillDisappearBlock();
         });
     }
-
+    
     self.wasPreviouslyVisible = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-
+    
     // Call our view did disappear block
     if (self.viewDidDisappearBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.viewDidDisappearBlock();
         });
     }
-
+    
     // Pause our video if we have one.
     if ((self.player.rate != 0.0) && !self.player.error) {
         [self.player pause];
@@ -280,31 +272,31 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-
+    
     /*
-    if (self.videoURL) {
-        self.moviePlayerController.view.frame = self.view.frame;
-    }
-
-    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-    CGFloat contentWidth = viewWidth * kContentWidthMultiplier;
-    CGFloat xPadding = (viewWidth - contentWidth) / 2.0;
-
-    [self.iconImageView setFrame:CGRectMake((viewWidth / 2.0) - (self.iconWidth / 2.0), self.topPadding, self.iconWidth, self.iconHeight)];
-
-    CGFloat titleYOrigin = CGRectGetMaxY(self.iconImageView.frame) + self.underIconPadding;
-
-    self.titleLabel.frame = CGRectMake(xPadding, titleYOrigin, contentWidth, 0);
-    [self.titleLabel sizeToFit];
-    self.titleLabel.frame = CGRectMake(xPadding, titleYOrigin, contentWidth, CGRectGetHeight(self.titleLabel.frame));
-
-    CGFloat bodyYOrigin = CGRectGetMaxY(self.titleLabel.frame) + self.underTitlePadding;
-
-    self.bodyLabel.frame = CGRectMake(xPadding, bodyYOrigin, contentWidth, 0);
-    [self.bodyLabel sizeToFit];
-    self.bodyLabel.frame = CGRectMake(xPadding, bodyYOrigin, contentWidth, CGRectGetHeight(self.bodyLabel.frame));
-
-    self.actionButton.frame = CGRectMake((CGRectGetMaxX(self.view.frame) / 2) - (contentWidth / 2), CGRectGetMaxY(self.view.frame) - self.underPageControlPadding - kMainPageControlHeight - kActionButtonHeight - self.bottomPadding, contentWidth, kActionButtonHeight);
+     if (self.videoURL) {
+     self.moviePlayerController.view.frame = self.view.frame;
+     }
+     
+     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+     CGFloat contentWidth = viewWidth * kContentWidthMultiplier;
+     CGFloat xPadding = (viewWidth - contentWidth) / 2.0;
+     
+     [self.iconImageView setFrame:CGRectMake((viewWidth / 2.0) - (self.iconWidth / 2.0), self.topPadding, self.iconWidth, self.iconHeight)];
+     
+     CGFloat titleYOrigin = CGRectGetMaxY(self.iconImageView.frame) + self.underIconPadding;
+     
+     self.titleLabel.frame = CGRectMake(xPadding, titleYOrigin, contentWidth, 0);
+     [self.titleLabel sizeToFit];
+     self.titleLabel.frame = CGRectMake(xPadding, titleYOrigin, contentWidth, CGRectGetHeight(self.titleLabel.frame));
+     
+     CGFloat bodyYOrigin = CGRectGetMaxY(self.titleLabel.frame) + self.underTitlePadding;
+     
+     self.bodyLabel.frame = CGRectMake(xPadding, bodyYOrigin, contentWidth, 0);
+     [self.bodyLabel sizeToFit];
+     self.bodyLabel.frame = CGRectMake(xPadding, bodyYOrigin, contentWidth, CGRectGetHeight(self.bodyLabel.frame));
+     
+     self.actionButton.frame = CGRectMake((CGRectGetMaxX(self.view.frame) / 2) - (contentWidth / 2), CGRectGetMaxY(self.view.frame) - self.underPageControlPadding - kMainPageControlHeight - kActionButtonHeight - self.bottomPadding, contentWidth, kActionButtonHeight);
      */
 }
 
@@ -335,3 +327,4 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
 }
 
 @end
+
