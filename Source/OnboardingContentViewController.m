@@ -91,10 +91,9 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     }
     
     // Icon image view
-    self.iconImageView = [[UIImageViewAligned alloc] initWithImage:image];
+    self.iconImageView = [[UIImageView alloc] initWithImage:image];
     self.iconWidth = image ? image.size.width : kDefaultImageViewSize;
     self.iconHeight = image ? image.size.height : kDefaultImageViewSize;
-    //self.iconImageView.alignTop = YES;
     // Title label
     self.titleLabel = [UILabel new];
     self.titleLabel.accessibilityIdentifier = kOnboardMainTextAccessibilityIdentifier;
@@ -166,7 +165,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
         [self.view addSubview:self.moviePlayerController.view];
     }
     
-    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.iconImageView, self.titleLabel, self.bodyLabel, self.actionButton]];
+    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.iconImageView, [[UIView alloc] init],  self.titleLabel, self.bodyLabel, self.actionButton]];
     
     
     stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -181,7 +180,7 @@ NSString * const kOnboardActionButtonAccessibilityIdentifier = @"OnboardActionBu
     [self.actionButton.heightAnchor constraintEqualToConstant:50].active = YES;
     
     stackView.spacing = 12.0;
- 
+    
     self.iconImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.iconImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisVertical];
 }

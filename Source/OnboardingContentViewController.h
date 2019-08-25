@@ -43,7 +43,7 @@ typedef void (^action_callback)(OnboardingViewController *onboardController);
 /**
  * @brief The image view used to show the top icon.
  */
-@property (nonatomic, strong) UIImageViewAligned *iconImageView;
+@property (nonatomic, strong) UIImageView *iconImageView;
 
 
 /**
